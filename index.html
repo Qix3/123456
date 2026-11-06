@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анатомия глаза — открытый урок по физиологии</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ==== UI ==== -->
+  <div id="ui">
+    <h1>Анатомия глаза</h1>
+    <div class="subtitle">Открытый урок по физиологии: 3D-модель глаза, психоактивные вещества и клиническая оценка зрачка</div>
+
+    <div class="section"><h2>Вещество</h2>
+      <div class="acc" id="subs-acc">
+        <button class="acc-head" id="subs-head" aria-expanded="false"><span id="subs-cur">Норма</span><span class="acc-caret">▾</span></button>
+        <div class="acc-body" id="subs"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Доза <span class="h2-val" id="dose-val">100 %</span></h2>
+      <input type="range" id="dose" class="rng" min="0" max="100" value="100">
+      <div class="hint-line">0 % — чистая норма, 100 % — полный эффект выбранной категории.</div>
+    </div>
+
+    <div class="section">
+      <h2>Разрез</h2>
+      <div class="row"><span class="row-lbl">Сагиттальный срез глаза</span>
+        <label class="switch"><input type="checkbox" id="cut-toggle"><span></span></label></div>
+    </div>
+
+    <div class="section">
+      <h2>Придатки глаза</h2>
+      <div class="row"><span class="row-lbl">Мышцы и слёзные пути</span>
+        <label class="switch"><input type="checkbox" id="adnexa-toggle"><span></span></label></div>
+      <div class="hint-line mt8">Веки станут полупрозрачными: под ними видны 6 глазодвигательных мышц, слёзная железа и слёзные пути.</div>
+      <div class="row mt8"><span class="row-lbl">Моргание</span>
+        <label class="switch"><input type="checkbox" id="blink-toggle" checked><span></span></label></div>
+      <button class="btn w100 mt8" id="blink-btn">Моргнуть</button>
+    </div>    <div class="section">
+      <h2>Сетчатка</h2>
+      <div class="grid2">
+        <button class="btn active" data-lv="flat">Плоско</button>
+        <button class="btn" data-lv="layers">Послойно</button>
+      </div>
+      <div class="hint-line mt8">«Послойно» раскладывает 8 слоёв сетчатки — видно при разборе сетчатки или на сагиттальном срезе.</div>
+    </div>
+
+    <div class="section">
+      <h2>Пигмент радужки</h2>
+      <div class="iris-opts" id="iris-opts"></div>
+      <div class="hint-line mt8">Цвет зависит от количества меланина в строме и пигментном эпителии; он же меняет рассеяние света радужкой.</div>
+    </div>
+
+    <div class="section">
+      <h2>Кровеносная система</h2>
+      <div class="row"><span class="row-lbl">Показать сосуды</span>
+        <label class="switch"><input type="checkbox" id="vasc-toggle"><span></span></label></div>
+      <div class="grid2 mt8">
+        <button class="btn active" data-vasc="artery"><span class="dot-art">●</span> Артерии</button>
+        <button class="btn active" data-vasc="vein"><span class="dot-vein">●</span> Вены</button>
+      </div>
+      <div class="hint-line mt8">В режиме сосудов склера, хориоидея и сетчатка становятся прозрачными: видно артерии (красные) и вены (синие). Остальные переключатели скрывают свою группу.</div>
+    </div>
+
+    <div class="section">
+      <h2>Симуляция зрения</h2><div class="grid2" id="cbs"></div></div>
+
+    <div class="section">
+      <h2>Физиология зрения <span class="h2-val" id="lux-val">60 лк</span></h2>
+      <input type="range" id="lux" class="rng" min="0" max="100" value="69">
+      <div class="rc">
+        <div class="rc-row sl"><span class="rc-lbl" data-focus="retina" title="Показать сетчатку в модели">Палочки</span><input type="range" id="rod" class="rng" min="0" max="130" step="1" value="120"><span class="rc-num" id="rod-num">120 млн</span></div>
+        <div class="rc-row sl"><span class="rc-lbl" data-focus="macula-lutea" title="Показать жёлтое пятно в модели">Колбочки</span><input type="range" id="cone" class="rng" min="0" max="7" step="0.1" value="6"><span class="rc-num" id="cone-num">6,0 млн</span></div>
+      </div>
+      <div class="sw-line" id="sw-line"><span></span><span></span><span></span><span></span></div>
+      <div class="hint-line mt8">Палочки (0–130 млн) — сумеречная чувствительность и яркость; колбочки (0–7 млн) — цвет, насыщенность и острота (размытие). Нажмите на подпись, чтобы показать структуру.</div>
+      <div class="tc mt10"><span>Тёмная адаптация</span><span id="adapt-note">палочки адаптированы</span></div>
+      <div class="adapt-bar"><i id="adapt-bar"></i></div>
+      <div class="row mt7"><span class="row-lbl">Палочки <b id="adapt-val">100 %</b></span><button class="btn btn-tight" id="adapt-btn">↻ Заново</button></div>
+      <div class="hint-line">Реакция фоторецепторов не мгновенная: после резкого затемнения чувствительность растёт постепенно. В жизни это 30–40 минут, здесь — 25 секунд.</div>
+    </div>
+
+    <div class="section">
+      <h2>Хрусталик: возраст и помутнение</h2>
+      <canvas id="view-prev" class="view-prev"></canvas>
+      <div class="rc">
+        <div class="rc-row sl"><span class="rc-lbl" data-focus="lens" title="Показать хрусталик в модели">Возраст</span><input type="range" id="age" class="rng" min="0" max="80" step="1" value="25"><span class="rc-num" id="age-num">25 лет</span></div>
+        <div class="rc-row sl"><span class="rc-lbl" data-focus="lens" title="Показать хрусталик в модели">Помутнение</span><input type="range" id="haze" class="rng" min="0" max="100" step="1" value="0"><span class="rc-num" id="haze-num">0 %</span></div>
+      </div>
+      <div class="tc mt8" id="acc-readout"></div>
+      <div class="hint-line mt8">С возрастом хрусталик теряет эластичность, его край мутнеет и желтеет: объём аккомодации падает, а ближайшая точка ясного зрения отодвигается — пресбиопия. Ползунок «Помутнение» — катаракта: картинка превью размывается и желтит. Пригасите свет в разделе выше — красные предметы потемнеют первыми, а синие останутся заметными (сдвиг Пуркинье).</div>
+    </div>
+
+    <div class="section">
+      <h2>Зрачковый рефлекс</h2>
+      <div class="row"><span class="row-lbl">Взгляд вблизи (33 см)</span>
+        <label class="switch"><input type="checkbox" id="near-toggle"><span></span></label></div>
+      <div class="hint-line mt6">Триада аккомодации: хрусталик меняет кривизну, глаза конвергируют, зрачок сужается — рефлекс на близкую установку, а не только на свет.</div>
+      <div class="row mt8"><span class="row-lbl">Фонарик</span>
+        <label class="switch"><input type="checkbox" id="torch-toggle"><span></span></label></div>
+      <input type="range" id="torch-near" class="rng" min="0" max="100" value="0">
+      <div class="hint-line">Ползунок — расстояние до глаза: подносите фонарик ближе, зрачок сужается (прямой рефлекс на свет).</div>
+      <div class="row mt8"><span class="row-lbl">Поражение III пары</span>
+        <label class="switch"><input type="checkbox" id="cn3-toggle"><span></span></label></div>
+      <div class="hint-line">Паралич глазодвигательного нерва: сфинктер зрачка не работает — зрачок остаётся широким и на свет не реагирует.</div>
+    </div>
+
+    <div class="section">
+      <h2>Офтальмоскопия</h2>
+      <button class="btn w100" id="fundus-btn">Открыть глазное дно</button>
+      <div class="hint-line mt8">2D-вид глазного дна: диск зрительного нерва, макула, сосудистые аркады. Три картины — норма, диабетическая и гипертоническая ретинопатия.</div>
+    </div>
+
+    <div class="section">
+      <h2>Дополнительные тесты</h2>
+      <div class="grid2">
+        <button class="btn" id="bs-open">💡 Слепое пятно</button>
+        <button class="btn" id="ams-open">▦ Тест Амслера</button>
+        <button class="btn" id="astig-open">✳ Астигматизм</button>
+        <button class="btn" id="vf-open">👁 Поля зрения</button>
+        <button class="btn" id="binoc-open">👀 Бинокулярное</button>
+        <button class="btn" id="ai-open">🎨 Последовательный образ</button>
+        <button class="btn" id="sacc-open">📖 Саккады</button>
+        <button class="btn" id="pq-open">🧩 Порядок пути</button>
+        <button class="btn" id="pt-open">⚡ Фототрансдукция</button>
+        <button class="btn" id="rev-open">🔄 Экзамен наоборот</button>
+      </div>
+      <div class="hint-line">Слепое пятно: точка исчезает, когда попадает на диск зрительного нерва. Тест Амслера: сетка покажет, как видит мир человек с поражением макулы. Астигматизм: лучи звезды одного меридиана расплываются. Поля зрения: что видит каждый глаз отдельно и что — только вместе.</div>
+    </div>
+
+    <div class="section">
+      <h2>Медицинское описание</h2>
+      <div class="tc" id="timecourse"></div>
+      <div class="mini mt8" id="withdrawal"></div>
+      <div class="terms" id="terms"></div>
+    </div>
+
+    <div class="section">
+      <h2>Структура глаза</h2>
+      <div class="info-box" id="struct-box">
+        <div id="info-title">Нажмите на структуру</div>
+        <div id="struct-lat">выберите элемент модели</div>
+        <div id="struct-fact">Наведите на глаз — деталь подсветится и покажет название. Клик оставит только её: остальные части плавно растворятся, а здесь появятся латинское имя и функция.</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="cmp-btn">⚖ Сравнить с нормой</button>
+      <button id="brain-btn">🧠 Зрительный центр</button>
+      <button id="quiz-btn">🎓 Проверка знаний</button>
+      <button id="report-btn">📄 Скачать отчёт</button>
+      <button id="reset-btn">↺ Сбросить</button>
+    </div>
+    <div class="credits">Демонстрационный материал для урока физиологии. Признаки — ориентировочные учебные значения, не клинический диагностический инструмент. Медицинская помощь при интоксикации — 103 (Узбекистан).</div>
+  </div>
+
+  <!-- ==== ХОЛСТ ==== -->
+  <div id="canvas-wrap">
+    <div id="vignette"></div>
+    <div id="subs-card">
+      <div class="sc-meta" id="sc-meta">норма</div>
+      <h3 id="sc-name">Норма</h3>
+      <p id="sc-mech"></p>
+      <div class="sc-row" id="sc-tags"></div>
+    </div>
+    <div id="hint">наведите — деталь подсветится · клик — рассматривать отдельно</div>
+    <div id="cmp-labels"><span id="cmp-a">норма</span><span>норма</span></div>
+    <div class="cmp-line" id="cmp-line"></div>
+    <div id="hud">
+      <div class="card"><h3>PERRLA</h3><div id="perrla"></div></div>
+      <div class="vitals" id="vitals"></div>
+    </div>
+    <div id="focus-card">
+      <div id="fc-lat"></div>
+      <h3 id="fc-name"></h3>
+      <p id="fc-fn"></p>
+      <div id="fc-layers"></div>
+      <button class="scn-btn" id="fc-scn" hidden>⚠ Что будет, если…</button>
+      <div class="scn-box" id="fc-scn-box"></div>
+      <div class="fc-row"><button id="fc-close">↩ Показать весь глаз</button><span class="fc-hint">потяните — поворот · колесо — масштаб</span></div>
+    </div>
+  </div>
+
+</div>
+<div id="tip"></div>
+<div id="hover-tip"></div>
+<div id="modal"><div class="modal-card" id="modal-card"></div></div>
+<div id="brain"><div class="brain-card">
+  <div class="bc-head"><div class="grow"><h2>Зрительный центр — путь сигнала от сетчатки к коре</h2>
+    <p>Плоская принципиальная схема, а не карта мозга: показан порядок передачи сигнала. Нижний ряд — этапы 1→6 (сетчатка → тракт), верхний — 7→10 (ЛКТ → кора V2–V4, справа налево). Нажмите на кружок — появится латинское название и функция этапа.</p></div>
+    <button id="brain-close" aria-label="Закрыть">✕</button></div>
+  <div class="bc-tools"><span>потоки</span>
+    <button class="bc-tool" data-stream="v">Что? — вентральный</button>
+    <button class="bc-tool" data-stream="d">Где? — дорсальный</button>
+  </div>
+  <div id="bc-flow"></div>
+  <div class="bc-info" id="bc-info"></div>
+  <div class="vc-lab">
+    <h3 class="vc-lab-h">Как устроена кора</h3>
+    <div class="vc-lab-sub">Корковое увеличение: фовеа в сетчатке и в V1</div>
+    <canvas id="vc-mag" class="vc-cv" height="120"></canvas>
+    <div class="vc-lab-sub">Рецептивное поле: центр и периферия</div>
+    <canvas id="vc-rf" class="vc-cv" height="190"></canvas>
+    <input type="range" id="vc-rf-dist" class="rng" min="0" max="100" value="0">
+    <div class="tc"><span>где пятно</span><b id="vc-rf-val">в центре — сильный ответ</b></div>
+    <div class="vc-lab-sub">Три типа клеток V1</div>
+    <div class="grid3" id="vc-cards"></div>
+    <div class="vc-lab-sub">Глазодоминантные колонки</div>
+    <canvas id="vc-cols" class="vc-cv" height="92"></canvas>
+    <div class="hint-line mt6">Клетки коры собраны в колонки, которые по очереди обслуживают то левый, то правый глаз: полосы шириной около 0,5 мм образуют «штрихкод» из глаз и бинокулярных зон перекрытия.</div>
+    <div class="vc-lab-sub">P-путь и M-путь</div>
+    <table class="vc-tbl">
+      <tr><th>свойство</th><th>P-путь (parvo)</th><th>M-путь (magno)</th></tr>
+      <tr><td>Клетки</td><td>мелкие</td><td>крупные</td></tr>
+      <tr><td>Скорость</td><td>медленная</td><td>быстрая</td></tr>
+      <tr><td>Цвет</td><td>да, красный/зелёный</td><td>нет</td></tr>
+      <tr><td>Контраст</td><td>высокая чувствительность</td><td>нужен сильный контраст</td></tr>
+      <tr><td>Острота</td><td>высокая</td><td>низкая</td></tr>
+      <tr><td>Слои ЛКТ</td><td>3, 4, 5, 6</td><td>1, 2</td></tr>
+      <tr><td>Задача</td><td>«что это»: форма, деталь</td><td>«где и куда движется»</td></tr>
+    </table>
+  </div>
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
